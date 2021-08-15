@@ -10,23 +10,6 @@ fn main() {
     options.set_encryption_key(key);
     options.enabled_on_debug_build = true;
 
-    // Build bundle
-    // AssetBundler::from(options.clone()).build().unwrap();
-
-    // Load bundle
-    // let mut asset_io = BundledAssetIo::from(options.clone());
-    // asset_io.ensure_loaded().unwrap();
-    // println!(
-    //     "fonts.is_directory: {}",
-    //     asset_io.is_directory(Path::new("fonts"))
-    // );
-    // println!(
-    //     "dummy.is_directory: {}",
-    //     asset_io.is_directory(Path::new("dummy"))
-    // );
-    // let future = asset_io.load_path(Path::new("branding/bevy_logo_dark_big.png"));
-    // futures_lite::future::block_on(async { future.await.unwrap() });
-    // std::process::exit(0);
     let mut log_setting = LogSettings::default();
     log_setting.level = Level::INFO;
     App::build()
