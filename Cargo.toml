@@ -1,0 +1,40 @@
+[package]
+edition = "2018"
+name = "bevy_assets_bundler"
+version = "0.1.0"
+
+exclude = []
+resolver = "2"
+
+[workspace]
+exclude = []
+members = ["example"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = [
+  "encryption",
+]
+
+compression = ["brotli"]
+encryption = ["aes", "block-modes"]
+
+[dependencies]
+anyhow = "^1"
+bevy_app = "^0.5"
+bevy_asset = "^0.5"
+bevy_tasks = "^0.5"
+bevy_utils = "^0.5"
+cfg-if = "^1"
+tar = "^0.4"
+tracing = "^0.1"
+
+aes = {version = "^0.7", optional = true}
+block-modes = {version = "^0.8", optional = true}
+
+brotli = {version = "^3.3", optional = true}
+
+[dev-dependencies]
+futures-lite = "^1"
+rand = "^0"

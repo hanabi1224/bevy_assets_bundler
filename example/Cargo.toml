@@ -1,0 +1,20 @@
+[package]
+edition = "2018"
+name = "example"
+version = "0.1.0"
+
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy = "0.5"
+futures-lite = "1"
+rand = "0"
+
+bevy_assets_bundler = {path = "../"}
+
+[dev-dependencies]
+
+[build-dependencies]
+bevy_assets_bundler = {path = "../"}
