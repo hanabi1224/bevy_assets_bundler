@@ -11,9 +11,11 @@ use std::{
 };
 use tar::Archive;
 
+type ParentDirToPathInfo = HashMap<PathBuf, Vec<ArchivePathInfo>>;
+
 pub struct BundledAssetIo {
     options: BundledAssetIoOptions,
-    parent_dir_to_path_info: Option<Arc<RwLock<HashMap<PathBuf, Vec<ArchivePathInfo>>>>>,
+    parent_dir_to_path_info: Option<Arc<RwLock<ParentDirToPathInfo>>>,
 }
 
 impl Default for BundledAssetIo {
@@ -60,9 +62,7 @@ impl BundledAssetIo {
                     if let Some(vec) = mappings.get_mut(&parent_dir) {
                         vec.push(path_info);
                     } else {
-                        let mut vec = Vec::new();
-                        vec.push(path_info);
-                        mappings.insert(parent_dir, vec);
+                        mappings.insert(parent_dir, vec![path_info]);
                     }
                 }
             }
@@ -75,7 +75,7 @@ impl BundledAssetIo {
     }
 
     fn get_bundle_path(&self) -> anyhow::Result<PathBuf, AssetIoError> {
-        let mut bundle_path = env::current_exe().map_err(|err| AssetIoError::Io(err))?;
+        let mut bundle_path = env::current_exe().map_err(AssetIoError::Io)?;
         bundle_path.pop();
         bundle_path.push(self.options.asset_bundle_name.clone());
         Ok(bundle_path)
@@ -109,7 +109,7 @@ impl AssetIo for BundledAssetIo {
                     }
                 }
             }
-            return Err(AssetIoError::NotFound(path.to_path_buf()));
+            Err(AssetIoError::NotFound(path.to_path_buf()))
         })
     }
 
@@ -122,11 +122,11 @@ impl AssetIo for BundledAssetIo {
             let mappings = lock.read().unwrap();
             // TODO: normalize path
             if let Some(entries) = mappings.get(path) {
-                let vec: Vec<PathBuf> = entries.into_iter().map(|e| e.path()).collect();
+                let vec: Vec<PathBuf> = entries.iter().map(|e| e.path()).collect();
                 return Ok(Box::new(vec.into_iter()));
             }
         }
-        return Err(AssetIoError::NotFound(path.to_path_buf()));
+        Err(AssetIoError::NotFound(path.to_path_buf()))
     }
 
     fn is_directory(&self, path: &Path) -> bool {

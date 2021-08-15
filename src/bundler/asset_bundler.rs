@@ -1,6 +1,7 @@
 use crate::BundledAssetIoOptions;
 use std::env;
 use std::fs;
+use std::path::Path;
 use std::path::PathBuf;
 
 #[cfg(feature = "encryption")]
@@ -37,7 +38,7 @@ impl AssetBundler {
 
     pub fn build(&self) -> anyhow::Result<()> {
         if !self.options.enabled_on_debug_build
-            && env::var("PROFILE").unwrap_or("".into()) == "debug"
+            && env::var("PROFILE").unwrap_or_else(|_| "".into()) == "debug"
         {
             warn!("disabled on debug build");
             return Ok(());
@@ -45,16 +46,11 @@ impl AssetBundler {
         info!("Start bundling assets, cwd: {:?}", env::current_dir());
 
         #[cfg(feature = "encryption")]
-        if self.options.encryption_on {
-            match self.options.encryption_key {
-                None => {
-                    // Default key?
-                    return Err(anyhow::Error::msg(
-                        "Asset encryption is enabled but encryption key is not provided.",
-                    ));
-                }
-                _ => {}
-            }
+        if self.options.encryption_on && self.options.encryption_key.is_none() {
+            // Default key?
+            return Err(anyhow::Error::msg(
+                "Asset encryption is enabled but encryption key is not provided.",
+            ));
         }
 
         let asset_dir = PathBuf::from(&self.asset_folder);
@@ -85,7 +81,7 @@ impl AssetBundler {
 
 fn archive_dir(
     builder: &mut tar::Builder<fs::File>,
-    asset_dir: &PathBuf,
+    asset_dir: &Path,
     options: &BundledAssetIoOptions,
 ) -> anyhow::Result<()> {
     archive_dir_recursive(builder, asset_dir, asset_dir, options)?;
@@ -94,8 +90,8 @@ fn archive_dir(
 
 fn archive_dir_recursive(
     builder: &mut tar::Builder<fs::File>,
-    dir: &PathBuf,
-    prefix: &PathBuf,
+    dir: &Path,
+    prefix: &Path,
     options: &BundledAssetIoOptions,
 ) -> anyhow::Result<()> {
     for entry_result in fs::read_dir(dir)? {
@@ -117,7 +113,7 @@ fn archive_dir_recursive(
                     header.set_size(encrypted.len() as u64);
                     // header.set_mode(0o400);
                     header.set_cksum();
-                    builder.append(&mut header, encrypted.as_slice())?;
+                    builder.append(&header, encrypted.as_slice())?;
                     continue;
                 }
             }
@@ -131,7 +127,7 @@ fn archive_dir_recursive(
 fn get_exe_dir() -> anyhow::Result<PathBuf> {
     let mut dir = env::current_exe()?;
     dir.pop();
-    if !env::var("OUT_DIR").unwrap_or("".into()).is_empty() {
+    if !env::var("OUT_DIR").unwrap_or_else(|_| "".into()).is_empty() {
         dir.pop();
         dir.pop();
     }

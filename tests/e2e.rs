@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
     use bevy_assets_bundler::*;
+    #[cfg(feature = "encryption")]
     use rand::prelude::*;
     use std::{
         fs,
@@ -14,19 +15,22 @@ mod tests {
         e2e_inner(false).unwrap();
     }
 
+    #[cfg(feature = "encryption")]
     #[test]
     fn e2e_encryption_on() {
         e2e_inner(true).unwrap();
     }
 
-    fn e2e_inner(enable_encryption: bool) -> anyhow::Result<()> {
+    fn e2e_inner(_enable_encryption: bool) -> anyhow::Result<()> {
         let mut options = BundledAssetIoOptions::default();
         options.enabled_on_debug_build = true;
-        if enable_encryption {
+        #[cfg(feature = "encryption")]
+        if _enable_encryption {
             let mut rng = rand::thread_rng();
             let mut key = [0; 16];
             rng.try_fill_bytes(&mut key)?;
             options.set_encryption_key(key);
+            options.asset_bundle_name = "assets.encrypted.bin".into();
         }
 
         // build bundle

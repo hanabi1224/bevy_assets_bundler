@@ -54,7 +54,7 @@ impl BundledAssetIoOptions {
     #[cfg(feature = "encryption")]
     pub(crate) fn try_encrypt(&self, plain: &[u8]) -> anyhow::Result<Option<Vec<u8>>> {
         if let Some(cipher) = self.try_get_cipher_if_needed()? {
-            return Ok(Some(cipher.encrypt_vec(&plain)));
+            return Ok(Some(cipher.encrypt_vec(plain)));
         }
         Ok(None)
     }

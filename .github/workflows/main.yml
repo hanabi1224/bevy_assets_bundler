@@ -1,0 +1,36 @@
+name: main
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Install latest stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+      - uses: actions/checkout@v2
+
+      - run: cargo build --release --no-default-features
+      - run: cargo test --release --no-default-features
+
+      - run: cargo build --release
+      - run: cargo test --release
+
+      - run: cargo build --release --all-features
+      - run: cargo test --release --all-features
+
+      - run: cargo fmt -- --check
