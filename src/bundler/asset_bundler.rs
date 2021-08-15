@@ -70,13 +70,6 @@ impl AssetBundler {
             )))
         }
     }
-
-    #[cfg(feature = "encryption")]
-    pub fn set_encryption_key(&mut self, key: [u8; 16]) -> &mut Self {
-        self.options.encryption_on = true;
-        self.options.encryption_key = Some(key);
-        self
-    }
 }
 
 fn archive_dir(

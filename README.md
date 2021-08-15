@@ -1,5 +1,17 @@
 # bevy_assets_bundler
+
+[![main](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml)
+[![travis](https://travis-ci.com/hanabi1224/bevy_assets_bundler.svg?branch=main)](https://travis-ci.com/github/hanabi1224/bevy_assets_bundler)
+[![codecov](https://codecov.io/gh/hanabi1224/bevy_assets_bundler/branch/main/graph/badge.svg?token=gOcqVpMmIY)](https://codecov.io/gh/hanabi1224/bevy_assets_bundler)
+[![MIT License](https://img.shields.io/github/license/hanabi1224/bevy_assets_bundler.svg)](https://github.com/hanabi1224/bevy_assets_bundler/blob/master/LICENSE)
+
 Assets Bundler for bevy, with encryption support. Current archive format is tar and encryption algorithm is AES
+
+## Features
+
+- Bundle asset folder into a single assets.bin file
+- Asset encryption with custom key
+- One simple switch to turn off bundling on debug build
 
 ## [Installation](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/example/Cargo.toml)
 ```toml

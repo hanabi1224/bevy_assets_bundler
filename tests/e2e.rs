@@ -11,6 +11,11 @@ mod tests {
     const ASSET_PATH: &str = "example/assets";
 
     #[test]
+    fn e2e_all_default() {
+        e2e_default_inner().unwrap();
+    }
+
+    #[test]
     fn e2e_encryption_off() {
         e2e_inner(false).unwrap();
     }
@@ -40,10 +45,35 @@ mod tests {
 
         // load bundle
         let mut asset_io = BundledAssetIo::from(options.clone());
+        verify_asset_io(&mut asset_io)?;
+        Ok(())
+    }
+
+    fn e2e_default_inner() -> anyhow::Result<()> {
+        // build bundle
+        AssetBundler::default()
+            .with_asset_folder(ASSET_PATH)
+            .build()?;
+
+        // load bundle
+        let mut asset_io = BundledAssetIo::default();
+        verify_asset_io(&mut asset_io)?;
+        Ok(())
+    }
+
+    fn verify_asset_io(asset_io: &mut BundledAssetIo) -> anyhow::Result<()> {
         asset_io.ensure_loaded()?;
 
         assert_eq!(asset_io.is_directory(Path::new("fonts")), true);
         assert_eq!(asset_io.is_directory(Path::new("dummy")), false);
+
+        let mut n = 0;
+        for _ in asset_io.read_directory(Path::new("fonts"))? {
+            n += 1;
+        }
+        assert!(n > 0);
+
+        assert!(asset_io.read_directory(Path::new("dummy")).is_err());
 
         // Valid assets
         for asset_path in ["branding/bevy_logo_dark_big.png", "fonts/FiraSans-Bold.ttf"] {
