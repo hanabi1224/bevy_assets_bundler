@@ -1,4 +1,4 @@
-use crate::BundledAssetIoOptions;
+use crate::AssetBundlingOptions;
 use std::env;
 use std::fs;
 use std::path::Path;
@@ -8,21 +8,21 @@ use std::path::PathBuf;
 use std::io::Read;
 
 pub struct AssetBundler {
-    pub options: BundledAssetIoOptions,
+    pub options: AssetBundlingOptions,
     pub asset_folder: String,
 }
 
 impl Default for AssetBundler {
     fn default() -> Self {
         Self {
-            options: BundledAssetIoOptions::default(),
+            options: AssetBundlingOptions::default(),
             asset_folder: crate::DEFAULT_ASSET_FOLDER.to_owned(),
         }
     }
 }
 
-impl From<BundledAssetIoOptions> for AssetBundler {
-    fn from(options: BundledAssetIoOptions) -> Self {
+impl From<AssetBundlingOptions> for AssetBundler {
+    fn from(options: AssetBundlingOptions) -> Self {
         Self {
             options,
             asset_folder: crate::DEFAULT_ASSET_FOLDER.to_owned(),
@@ -75,7 +75,7 @@ impl AssetBundler {
 fn archive_dir(
     builder: &mut tar::Builder<fs::File>,
     asset_dir: &Path,
-    options: &BundledAssetIoOptions,
+    options: &AssetBundlingOptions,
 ) -> anyhow::Result<()> {
     archive_dir_recursive(builder, asset_dir, asset_dir, options)?;
     Ok(())
@@ -85,7 +85,7 @@ fn archive_dir_recursive(
     builder: &mut tar::Builder<fs::File>,
     dir: &Path,
     prefix: &Path,
-    options: &BundledAssetIoOptions,
+    options: &AssetBundlingOptions,
 ) -> anyhow::Result<()> {
     for entry_result in fs::read_dir(dir)? {
         let entry_path = entry_result?.path();

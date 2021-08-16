@@ -1,4 +1,5 @@
-use super::{path_info::ArchivePathInfo, BundledAssetIoOptions};
+use super::path_info::ArchivePathInfo;
+use crate::AssetBundlingOptions;
 use bevy_asset::{AssetIo, AssetIoError};
 use bevy_utils::BoxedFuture;
 use std::{
@@ -14,21 +15,21 @@ use tar::Archive;
 type ParentDirToPathInfo = HashMap<PathBuf, Vec<ArchivePathInfo>>;
 
 pub struct BundledAssetIo {
-    options: BundledAssetIoOptions,
+    options: AssetBundlingOptions,
     parent_dir_to_path_info: Option<Arc<RwLock<ParentDirToPathInfo>>>,
 }
 
 impl Default for BundledAssetIo {
     fn default() -> Self {
         Self {
-            options: BundledAssetIoOptions::default(),
+            options: AssetBundlingOptions::default(),
             parent_dir_to_path_info: None,
         }
     }
 }
 
-impl From<BundledAssetIoOptions> for BundledAssetIo {
-    fn from(options: BundledAssetIoOptions) -> Self {
+impl From<AssetBundlingOptions> for BundledAssetIo {
+    fn from(options: AssetBundlingOptions) -> Self {
         Self {
             options,
             parent_dir_to_path_info: None,

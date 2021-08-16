@@ -30,7 +30,7 @@ bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"
 // encryption key: [u8; 16] array
 // make sure the key is consistent between build.rs and main.rs
 let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-let mut options = BundledAssetIoOptions::default();
+let mut options = AssetBundlingOptions::default();
 options.set_encryption_key(key);
 options.enabled_on_debug_build = true;
 AssetBundler::from(options).build().unwrap();
@@ -45,7 +45,7 @@ fn main() {
     // encryption key: [u8; 16] array
     // make sure the key is consistent between build.rs and main.rs
     let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-        let mut options = BundledAssetIoOptions::default();
+        let mut options = AssetBundlingOptions::default();
         options.set_encryption_key(key);
 
     App::build()
@@ -62,7 +62,7 @@ fn main() {
 ## [Options](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/src/plugin/bundled_asset_options.rs)
 ```rust
 #[derive(Debug, Clone)]
-pub struct BundledAssetIoOptions {
+pub struct AssetBundlingOptions {
     #[cfg(feature = "encryption")]
     pub encryption_on: bool,
     #[cfg(feature = "encryption")]

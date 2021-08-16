@@ -2,7 +2,7 @@
 use crate::{Aes128Cbc, BlockMode};
 
 #[derive(Debug, Clone)]
-pub struct BundledAssetIoOptions {
+pub struct AssetBundlingOptions {
     #[cfg(feature = "encryption")]
     pub encryption_on: bool,
     #[cfg(feature = "encryption")]
@@ -13,7 +13,7 @@ pub struct BundledAssetIoOptions {
     pub asset_bundle_name: String,
 }
 
-impl Default for BundledAssetIoOptions {
+impl Default for AssetBundlingOptions {
     fn default() -> Self {
         Self {
             #[cfg(feature = "encryption")]
@@ -28,7 +28,7 @@ impl Default for BundledAssetIoOptions {
     }
 }
 
-impl BundledAssetIoOptions {
+impl AssetBundlingOptions {
     #[cfg(feature = "encryption")]
     pub fn set_encryption_key(&mut self, key: [u8; 16]) -> &mut Self {
         self.encryption_on = true;

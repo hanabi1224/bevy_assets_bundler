@@ -27,7 +27,7 @@ mod tests {
     }
 
     fn e2e_inner(_enable_encryption: bool) -> anyhow::Result<()> {
-        let mut options = BundledAssetIoOptions::default();
+        let mut options = AssetBundlingOptions::default();
         options.enabled_on_debug_build = true;
         #[cfg(feature = "encryption")]
         if _enable_encryption {

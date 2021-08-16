@@ -1,12 +1,15 @@
 #[macro_use]
 extern crate tracing;
 
+mod options;
+pub use options::AssetBundlingOptions;
+
 mod bundler;
 pub use bundler::AssetBundler;
 
 mod plugin;
 pub use bevy_asset::AssetIo;
-pub use plugin::{BundledAssetIo, BundledAssetIoOptions, BundledAssetIoPlugin};
+pub use plugin::{BundledAssetIo, BundledAssetIoPlugin};
 
 #[cfg(feature = "encryption")]
 use aes::Aes128;

@@ -1,21 +1,22 @@
-use super::{BundledAssetIo, BundledAssetIoOptions};
+use super::BundledAssetIo;
+use crate::AssetBundlingOptions;
 use bevy_app::{AppBuilder, Plugin};
 use bevy_asset::AssetServer;
 
 pub struct BundledAssetIoPlugin {
-    options: BundledAssetIoOptions,
+    options: AssetBundlingOptions,
 }
 
 impl Default for BundledAssetIoPlugin {
     fn default() -> Self {
         Self {
-            options: BundledAssetIoOptions::default(),
+            options: AssetBundlingOptions::default(),
         }
     }
 }
 
-impl From<BundledAssetIoOptions> for BundledAssetIoPlugin {
-    fn from(options: BundledAssetIoOptions) -> Self {
+impl From<AssetBundlingOptions> for BundledAssetIoPlugin {
+    fn from(options: AssetBundlingOptions) -> Self {
         Self { options }
     }
 }
