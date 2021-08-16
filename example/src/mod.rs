@@ -7,7 +7,7 @@ lazy_static::lazy_static! {
         options.set_encryption_key(key);
         options.enabled_on_debug_build = true;
         options.encode_file_names = true;
-        options.asset_bundle_name = "a/assets.bin".into();
+        // options.asset_bundle_name = "a/assets.bin".into();
         options
     };
 }
