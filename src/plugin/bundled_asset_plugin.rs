@@ -1,7 +1,10 @@
 use super::BundledAssetIo;
 use crate::AssetBundlingOptions;
-use bevy_app::{AppBuilder, Plugin};
-use bevy_asset::AssetServer;
+use bevy::{
+    app::{AppBuilder, Plugin},
+    asset::AssetServer,
+    tasks::IoTaskPool,
+};
 
 pub struct BundledAssetIoPlugin {
     options: AssetBundlingOptions,
@@ -33,7 +36,7 @@ impl Plugin for BundledAssetIoPlugin {
         }
         let task_pool = app
             .world()
-            .get_resource::<bevy_tasks::IoTaskPool>()
+            .get_resource::<IoTaskPool>()
             .expect("`IoTaskPool` resource not found.")
             .0
             .clone();

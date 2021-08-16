@@ -1,7 +1,9 @@
 use super::path_info::ArchivePathInfo;
 use crate::AssetBundlingOptions;
-use bevy_asset::{AssetIo, AssetIoError};
-use bevy_utils::BoxedFuture;
+use bevy::{
+    asset::{AssetIo, AssetIoError},
+    utils::BoxedFuture,
+};
 use std::{
     borrow::Borrow,
     collections::HashMap,

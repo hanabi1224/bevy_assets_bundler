@@ -8,7 +8,7 @@ mod bundler;
 pub use bundler::AssetBundler;
 
 mod plugin;
-pub use bevy_asset::AssetIo;
+pub use bevy::asset::AssetIo;
 pub use plugin::{BundledAssetIo, BundledAssetIoPlugin};
 
 #[cfg(feature = "encryption")]

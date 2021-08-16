@@ -1,11 +1,15 @@
-# bevy_assets_bundler
+# Bevy Assets Bundler
 
-[![main](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml)
+[![github action](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml)
 [![travis](https://travis-ci.com/hanabi1224/bevy_assets_bundler.svg?branch=main)](https://travis-ci.com/github/hanabi1224/bevy_assets_bundler)
 [![codecov](https://codecov.io/gh/hanabi1224/bevy_assets_bundler/branch/main/graph/badge.svg?token=gOcqVpMmIY)](https://codecov.io/gh/hanabi1224/bevy_assets_bundler)
-[![MIT License](https://img.shields.io/github/license/hanabi1224/bevy_assets_bundler.svg)](https://github.com/hanabi1224/bevy_assets_bundler/blob/master/LICENSE)
+[![loc](https://tokei.rs/b1/github/hanabi1224/bevy_assets_bundler?category=code)](https://github.com/hanabi1224/bevy_assets_bundler)
+[![License](https://img.shields.io/github/license/hanabi1224/bevy_assets_bundler.svg)](https://github.com/hanabi1224/bevy_assets_bundler/blob/master/LICENSE)
 
-Assets Bundler for bevy, with encryption support. Current archive format is tar and encryption algorithm is AES
+[![crates.io](https://img.shields.io/crates/v/bevy_assets_bundler)](https://crates.io/crates/bevy_assets_bundler)
+[![docs.rs](https://docs.rs/bevy_assets_bundler/badge.svg)](https://docs.rs/bevy_assets_bundler)
+
+Assets Bundler for bevy, with content encryption support. Current archive format is tar and encryption algorithm is AES
 
 ## Features
 
@@ -19,11 +23,20 @@ Assets Bundler for bevy, with encryption support. Current archive format is tar 
 # Cargo.toml
 [dependencies]
 bevy = "0.5"
+bevy_assets_bundler = "0.1"
+
+[build-dependencies]
+bevy_assets_bundler = "0.1"
+```
+<!-- ```toml
+# Cargo.toml
+[dependencies]
+bevy = "0.5"
 bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"}
 
 [build-dependencies]
 bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"}
-```
+``` -->
 
 ## [Build Script](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/example/build.rs)
 
@@ -88,3 +101,8 @@ pub struct AssetBundlingOptions {
 
 - Compression
 - More encryption algorithms
+
+
+## [License](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/LICENSE)
+
+MIT
