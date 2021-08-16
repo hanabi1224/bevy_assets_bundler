@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 #[cfg(feature = "encryption")]
 use crate::{Aes128Cbc, BlockMode};
 
@@ -10,6 +12,7 @@ pub struct AssetBundlingOptions {
     #[cfg(feature = "compression")]
     pub enable_compression: bool,
     pub enabled_on_debug_build: bool,
+    pub encode_file_names: bool,
     pub asset_bundle_name: String,
 }
 
@@ -23,6 +26,7 @@ impl Default for AssetBundlingOptions {
             enabled_on_debug_build: false,
             #[cfg(feature = "compression")]
             enable_compression: false,
+            encode_file_names: false,
             asset_bundle_name: crate::DEFAULT_ASSET_BUNDLE_NAME.to_owned(),
         }
     }
@@ -65,5 +69,47 @@ impl AssetBundlingOptions {
             return Ok(Some(cipher.decrypt_vec(encrypted)?));
         }
         Ok(None)
+    }
+
+    fn try_encode_string(&self, s: &str) -> anyhow::Result<String> {
+        #[cfg(feature = "encryption")]
+        if self.is_encryption_ready() {
+            let bytes = s.as_bytes();
+            if let Some(encrypted) = self.try_encrypt(bytes)? {
+                return Ok(bs58::encode(encrypted).into_string());
+            }
+        }
+
+        Ok(bs58::encode(s).into_string())
+    }
+
+    fn try_decode_string(&self, s: &str) -> anyhow::Result<String> {
+        let vec = bs58::decode(s).into_vec()?;
+        #[cfg(feature = "encryption")]
+        if self.is_encryption_ready() {
+            if let Some(decrypted) = self.try_decrypt(&vec)? {
+                return Ok(String::from_utf8(decrypted)?);
+            }
+        }
+
+        Ok(String::from_utf8(vec)?)
+    }
+
+    pub(crate) fn try_encode_path(&self, p: &Path) -> anyhow::Result<PathBuf> {
+        Ok(p.to_str()
+            .unwrap()
+            .replace('\\', "/")
+            .split('/')
+            .map(|part| self.try_encode_string(part).unwrap())
+            .collect())
+    }
+
+    pub(crate) fn try_decode_path(&self, p: &Path) -> anyhow::Result<PathBuf> {
+        Ok(p.to_str()
+            .unwrap()
+            .replace('\\', "/")
+            .split('/')
+            .map(|part| self.try_decode_string(part).unwrap())
+            .collect())
     }
 }

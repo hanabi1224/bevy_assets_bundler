@@ -3,6 +3,7 @@ use crate::AssetBundlingOptions;
 use bevy_asset::{AssetIo, AssetIoError};
 use bevy_utils::BoxedFuture;
 use std::{
+    borrow::Borrow,
     collections::HashMap,
     env,
     fs::File,
@@ -12,7 +13,7 @@ use std::{
 };
 use tar::Archive;
 
-type ParentDirToPathInfo = HashMap<PathBuf, Vec<ArchivePathInfo>>;
+type ParentDirToPathInfo = HashMap<String, Vec<ArchivePathInfo>>;
 
 pub struct BundledAssetIo {
     options: AssetBundlingOptions,
@@ -44,26 +45,32 @@ impl BundledAssetIo {
             info!("Loading asset bundle: {:?}", bundle_path);
             let file = File::open(bundle_path)?;
             let mut archive = Archive::new(file);
-            let mut mappings: HashMap<PathBuf, Vec<ArchivePathInfo>> = HashMap::new();
+            let mut mappings: ParentDirToPathInfo = HashMap::new();
             let mut n_entries = 0;
             for entry in archive.entries()? {
                 if entry.is_ok() {
                     n_entries += 1;
                     let entry_file = entry?;
                     let path = entry_file.path()?;
-                    // let is_dir = path.is_dir();
-                    let mut parent_dir = path.to_path_buf();
-                    if parent_dir.pop() {
-                        // parent_dir = parent_dir.canonicalize();
+                    let decoded_path = if self.options.encode_file_names {
+                        self.options.try_decode_path(path.borrow())?
+                        // PathBuf::from(self.options.try_decode_string(path.to_str().unwrap())?)
                     } else {
-                        parent_dir = PathBuf::from("");
-                    }
+                        path.to_path_buf()
+                    };
+                    // let is_dir = path.is_dir();
+                    let mut parent_dir = decoded_path.clone();
+                    let parent_dir_str = if parent_dir.pop() {
+                        parent_dir.to_str().unwrap_or_else(|| "").replace('\\', "/")
+                    } else {
+                        "".into()
+                    };
                     debug!("Loading asset file {:?}, dir:{:?}", path, parent_dir);
-                    let path_info = ArchivePathInfo::new(path.to_path_buf());
-                    if let Some(vec) = mappings.get_mut(&parent_dir) {
+                    let path_info = ArchivePathInfo::new(decoded_path);
+                    if let Some(vec) = mappings.get_mut(&parent_dir_str) {
                         vec.push(path_info);
                     } else {
-                        mappings.insert(parent_dir, vec![path_info]);
+                        mappings.insert(parent_dir_str, vec![path_info]);
                     }
                 }
             }
@@ -89,21 +96,23 @@ impl AssetIo for BundledAssetIo {
         Box::pin(async move {
             let bundle_path = self.get_bundle_path()?;
             let file = File::open(bundle_path)?;
+            let encoded_entry_path = if self.options.encode_file_names {
+                self.options.try_encode_path(path).map_err(map_error)?
+            } else {
+                PathBuf::from(normalize_path(path))
+            };
             let mut archive = Archive::new(file);
             for entry in archive.entries()? {
                 if entry.is_ok() {
                     let mut entry_file = entry?;
                     let entry_path = entry_file.path()?;
-                    if entry_path.eq(path) {
+                    if entry_path.eq(&encoded_entry_path) {
                         let mut vec = Vec::new();
                         entry_file.read_to_end(&mut vec)?;
                         #[cfg(feature = "encryption")]
-                        if let Some(decrypted) = self.options.try_decrypt(&vec).map_err(|err| {
-                            AssetIoError::Io(std::io::Error::new(
-                                std::io::ErrorKind::Other,
-                                format!("{}", err),
-                            ))
-                        })? {
+                        if let Some(decrypted) =
+                            self.options.try_decrypt(&vec).map_err(map_error)?
+                        {
                             return Ok(decrypted);
                         }
                         return Ok(vec);
@@ -121,8 +130,8 @@ impl AssetIo for BundledAssetIo {
         info!("[read_directory] {:?}", path);
         if let Some(lock) = self.parent_dir_to_path_info.clone() {
             let mappings = lock.read().unwrap();
-            // TODO: normalize path
-            if let Some(entries) = mappings.get(path) {
+            let path_str = normalize_path(path);
+            if let Some(entries) = mappings.get(&path_str) {
                 let vec: Vec<PathBuf> = entries.iter().map(|e| e.path()).collect();
                 return Ok(Box::new(vec.into_iter()));
             }
@@ -135,7 +144,8 @@ impl AssetIo for BundledAssetIo {
         info!("is_directory: {:?}", path);
         if let Some(lock) = self.parent_dir_to_path_info.clone() {
             let mappings = lock.read().unwrap();
-            mappings.contains_key(path)
+            let path_str = normalize_path(path);
+            mappings.contains_key(&path_str)
         } else {
             false
         }
@@ -148,4 +158,15 @@ impl AssetIo for BundledAssetIo {
     fn watch_for_changes(&self) -> Result<(), AssetIoError> {
         Ok(())
     }
+}
+
+fn map_error(err: anyhow::Error) -> AssetIoError {
+    AssetIoError::Io(std::io::Error::new(
+        std::io::ErrorKind::Other,
+        format!("{}", err),
+    ))
+}
+
+fn normalize_path(path: &Path) -> String {
+    path.to_str().unwrap_or("").replace('\\', "/")
 }

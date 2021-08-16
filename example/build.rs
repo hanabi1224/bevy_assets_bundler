@@ -5,5 +5,6 @@ fn main() {
     let mut options = AssetBundlingOptions::default();
     options.set_encryption_key(key);
     options.enabled_on_debug_build = true;
+    options.encode_file_names = true;
     AssetBundler::from(options).build().unwrap();
 }

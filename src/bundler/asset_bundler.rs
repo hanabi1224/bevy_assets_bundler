@@ -92,7 +92,10 @@ fn archive_dir_recursive(
         if entry_path.is_dir() {
             archive_dir_recursive(builder, &entry_path, prefix, options)?;
         } else {
-            let name_in_archive = entry_path.strip_prefix(prefix)?;
+            let mut name_in_archive = entry_path.strip_prefix(prefix)?.to_owned();
+            if options.encode_file_names {
+                name_in_archive = options.try_encode_path(&name_in_archive)?;
+            }
             let mut file = fs::File::open(entry_path.clone())?;
             #[cfg(feature = "encryption")]
             if options.is_encryption_ready() {

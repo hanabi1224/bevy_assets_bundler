@@ -9,6 +9,7 @@ fn main() {
     let mut options = AssetBundlingOptions::default();
     options.set_encryption_key(key);
     options.enabled_on_debug_build = true;
+    options.encode_file_names = true;
 
     let mut log_setting = LogSettings::default();
     log_setting.level = Level::INFO;

@@ -11,6 +11,7 @@ Assets Bundler for bevy, with encryption support. Current archive format is tar 
 
 - Bundle asset folder into a single assets.bin file
 - Asset encryption with custom key
+- Asset file names encoding (base58 when ecryption is off, AES+base58 otherwise)
 - One simple switch to turn off bundling on debug build
 
 ## [Installation](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/example/Cargo.toml)
@@ -32,6 +33,7 @@ bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"
 let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 let mut options = AssetBundlingOptions::default();
 options.set_encryption_key(key);
+options.encode_file_names = true;
 options.enabled_on_debug_build = true;
 AssetBundler::from(options).build().unwrap();
 ```
@@ -45,8 +47,10 @@ fn main() {
     // encryption key: [u8; 16] array
     // make sure the key is consistent between build.rs and main.rs
     let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-        let mut options = AssetBundlingOptions::default();
-        options.set_encryption_key(key);
+    let mut options = AssetBundlingOptions::default();
+    options.set_encryption_key(key);
+    options.encode_file_names = true;
+    options.enabled_on_debug_build = true;
 
     App::build()
         .add_plugins_with(DefaultPlugins, |group| {
@@ -70,6 +74,7 @@ pub struct AssetBundlingOptions {
     #[cfg(feature = "compression")]
     pub enable_compression: bool,
     pub enabled_on_debug_build: bool,
+    pub encode_file_names: bool,
     pub asset_bundle_name: String,
 }
 ```
