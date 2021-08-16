@@ -1,16 +1,13 @@
+mod r#mod;
+use r#mod::BUNDLE_OPTIONS;
+
 use bevy::{log::Level, log::LogSettings, prelude::*};
-use bevy_assets_bundler::{AssetBundlingOptions, BundledAssetIoPlugin};
+use bevy_assets_bundler::BundledAssetIoPlugin;
 use std::env;
 
 /// This example illustrates the various features of Bevy UI.
 fn main() {
     println!("cwd: {:?}", env::current_dir());
-    let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-    let mut options = AssetBundlingOptions::default();
-    options.set_encryption_key(key);
-    options.enabled_on_debug_build = true;
-    options.encode_file_names = true;
-
     let mut log_setting = LogSettings::default();
     log_setting.level = Level::INFO;
     App::build()
@@ -24,7 +21,7 @@ fn main() {
             // the AssetPlugin should still run so that other aspects of the
             // asset system are initialized correctly.
             group.add_before::<bevy::asset::AssetPlugin, _>(BundledAssetIoPlugin::from(
-                options.clone(),
+                BUNDLE_OPTIONS.clone(),
             ))
         })
         .add_startup_system(setup.system())

@@ -33,7 +33,8 @@ You can generate a random key with [this playground](https://play.rust-lang.org/
 // build.rs
 // encryption key: [u8; 16] array
 // make sure the key is consistent between build.rs and main.rs
-let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+// or follow the example code to share code between build.rs and main.rs
+let key = [30, 168, 132, 180, 250, 203, 124, 96, 221, 206, 64, 239, 102, 20, 139, 79];
 let mut options = AssetBundlingOptions::default();
 options.set_encryption_key(key);
 options.encode_file_names = true;
@@ -49,7 +50,8 @@ use bevy::asset::AssetPlugin;
 fn main() {
     // encryption key: [u8; 16] array
     // make sure the key is consistent between build.rs and main.rs
-    let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    // or follow the example code to share code between build.rs and main.rs
+    let key = [30, 168, 132, 180, 250, 203, 124, 96, 221, 206, 64, 239, 102, 20, 139, 79];
     let mut options = AssetBundlingOptions::default();
     options.set_encryption_key(key);
     options.encode_file_names = true;

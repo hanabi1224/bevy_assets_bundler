@@ -10,6 +10,7 @@ resolver = "2"
 [dependencies]
 bevy = "0.5"
 futures-lite = "1"
+lazy_static = "1"
 rand = "0"
 
 bevy_assets_bundler = {path = "../"}
@@ -18,3 +19,4 @@ bevy_assets_bundler = {path = "../"}
 
 [build-dependencies]
 bevy_assets_bundler = {path = "../"}
+lazy_static = "1"
