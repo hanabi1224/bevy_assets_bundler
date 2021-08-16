@@ -102,6 +102,15 @@ pub struct AssetBundlingOptions {
 - Compression
 - More encryption algorithms
 
+## Bevy Version Supported
+
+|bevy|bevy_assets_bundler|
+|---|---|
+|0.5|0.1|
+
+## Examples
+
+Check out [example](https://github.com/hanabi1224/bevy_assets_bundler/tree/main/example) and [E2E test](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/tests/e2e.rs)
 
 ## [License](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/LICENSE)
 
