@@ -26,6 +26,9 @@ bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"
 ```
 
 ## [Build Script](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/example/build.rs)
+
+You can generate a random key with [this playground](https://play.rust-lang.org/?version=stable&mode=release&edition=2018&gist=cd3cb4ca8b86e67070b94caf366d162e)
+
 ```rust
 // build.rs
 // encryption key: [u8; 16] array
