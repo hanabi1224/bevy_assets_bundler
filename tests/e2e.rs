@@ -56,6 +56,21 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn relative_bundle_path() -> anyhow::Result<()> {
+        // build bundle
+        let mut options = create_default_options_with_random_bundle_name();
+        options.asset_bundle_name = format!("dir/{}", options.asset_bundle_name);
+        AssetBundler::from(options)
+            .with_asset_folder(ASSET_PATH)
+            .build()?;
+
+        // load bundle
+        let mut asset_io = BundledAssetIo::default();
+        verify_asset_io(&mut asset_io)?;
+        Ok(())
+    }
+
     fn e2e_default_inner() -> anyhow::Result<()> {
         // build bundle
         AssetBundler::default()

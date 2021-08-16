@@ -112,6 +112,10 @@ pub struct AssetBundlingOptions {
 
 Check out [example](https://github.com/hanabi1224/bevy_assets_bundler/tree/main/example) and [E2E test](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/tests/e2e.rs)
 
+To run example: ```cargo run -p example```
+
+go to ```target/release``` folder, now you can move example(.exe) and assets.bin to some other place and run, just keep the relative path between them.
+
 ## [License](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/LICENSE)
 
 MIT

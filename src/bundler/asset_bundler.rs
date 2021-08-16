@@ -56,9 +56,15 @@ impl AssetBundler {
         let asset_dir = PathBuf::from(&self.asset_folder);
         if asset_dir.is_dir() {
             let exe_dir = get_exe_dir()?;
-            let bundle_path = exe_dir.join(self.options.asset_bundle_name.clone());
-            // panic!("Generating asset bundle: {:?}", bundle_path);
-            let tar_file = fs::File::create(bundle_path)?;
+            let bundle_file_path = exe_dir.join(self.options.asset_bundle_name.clone());
+            // Create bundle_path parent dir if not exist.
+            if let Some(bundle_file_dir) = bundle_file_path.parent() {
+                if !bundle_file_dir.exists() {
+                    fs::create_dir_all(bundle_file_dir)?;
+                }
+            }
+
+            let tar_file = fs::File::create(bundle_file_path)?;
             let mut tar_builder = tar::Builder::new(tar_file);
             archive_dir(&mut tar_builder, &asset_dir, &self.options)?;
             Ok(())
