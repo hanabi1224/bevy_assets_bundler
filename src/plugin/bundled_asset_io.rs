@@ -61,7 +61,7 @@ impl BundledAssetIo {
                     // let is_dir = path.is_dir();
                     let mut parent_dir = decoded_path.clone();
                     let parent_dir_str = if parent_dir.pop() {
-                        parent_dir.to_str().unwrap_or_else(|| "").replace('\\', "/")
+                        parent_dir.to_str().unwrap_or("").replace('\\', "/")
                     } else {
                         "".into()
                     };

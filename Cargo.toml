@@ -42,3 +42,4 @@ block-modes = {version = "^0.8", optional = true}
 [dev-dependencies]
 futures-lite = "^1"
 rand = "^0"
+uuid = "^0"

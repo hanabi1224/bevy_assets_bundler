@@ -1,14 +1,13 @@
+mod common;
+
 #[cfg(test)]
 mod tests {
-    use bevy_assets_bundler::*;
-    #[cfg(feature = "encryption")]
-    use rand::prelude::*;
+    use super::common::prelude::*;
+
     use std::{
         fs,
         path::{Path, PathBuf},
     };
-
-    const ASSET_PATH: &str = "example/assets";
 
     #[test]
     fn e2e_all_default() {
@@ -38,17 +37,12 @@ mod tests {
     }
 
     fn e2e_inner(enable_encryption: bool, encode_file_names: bool) -> anyhow::Result<()> {
-        let mut options = AssetBundlingOptions::default();
+        let mut options = create_default_options_with_random_bundle_name();
         options.enabled_on_debug_build = true;
         options.encode_file_names = encode_file_names;
-        options.asset_bundle_name =
-            format!("assets-{}-{}.bin", enable_encryption, encode_file_names);
-        #[cfg(feature = "encryption")]
         if enable_encryption {
-            let mut rng = rand::thread_rng();
-            let mut key = [0; 16];
-            rng.try_fill_bytes(&mut key)?;
-            options.set_encryption_key(key);
+            #[cfg(feature = "encryption")]
+            options.set_encryption_key(create_random_key());
         }
 
         // build bundle
@@ -76,6 +70,9 @@ mod tests {
 
     fn verify_asset_io(asset_io: &mut BundledAssetIo) -> anyhow::Result<()> {
         asset_io.ensure_loaded()?;
+
+        asset_io.watch_for_changes()?;
+        asset_io.watch_path_for_changes(Path::new("any"))?;
 
         // Valid directories
         for dir in ["fonts", "nonascii/图", "nonascii\\图"] {
