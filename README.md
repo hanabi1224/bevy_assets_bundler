@@ -116,6 +116,10 @@ To run example: ```cargo run -p example```
 
 go to ```target/release``` folder, now you can move example(.exe) and assets.bin to some other place and run, just keep the relative path between them.
 
+## Disclaimer
+
+The encryption mechnism this library provides does not protect your assets from **ALL** kinds of reverse engineering as long as the game executable and the assets bundle are distributed to end user.
+
 ## [License](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/LICENSE)
 
 MIT
