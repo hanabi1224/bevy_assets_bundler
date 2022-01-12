@@ -6,16 +6,9 @@ use bevy::{
     tasks::IoTaskPool,
 };
 
+#[derive(Default)]
 pub struct BundledAssetIoPlugin {
     options: AssetBundlingOptions,
-}
-
-impl Default for BundledAssetIoPlugin {
-    fn default() -> Self {
-        Self {
-            options: AssetBundlingOptions::default(),
-        }
-    }
 }
 
 impl From<AssetBundlingOptions> for BundledAssetIoPlugin {

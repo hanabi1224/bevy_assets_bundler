@@ -14,10 +14,9 @@ keywords = ["bevy", "asset", "assets", "bundler"]
 readme = "README.md"
 repository = "https://github.com/hanabi1224/bevy_assets_bundler"
 
-edition = "2018"
+edition = "2021"
 exclude = [".github", ".vscode", "*.yml"]
 license = "MIT"
-resolver = "2"
 
 [workspace]
 exclude = []
@@ -41,7 +40,7 @@ bevy = {version = "~0.6", default-features = false}
 anyhow = "1"
 bs58 = "0.4"
 cfg-if = "1"
-tar = "0.4"
+tar = "0.4.38"
 tracing = "0.1"
 
 # encryption

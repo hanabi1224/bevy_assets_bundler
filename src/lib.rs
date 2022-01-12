@@ -14,9 +14,7 @@ pub use plugin::{BundledAssetIo, BundledAssetIoPlugin};
 #[cfg(feature = "encryption")]
 use aes::Aes128;
 #[cfg(feature = "encryption")]
-use block_modes::block_padding::Pkcs7;
-#[cfg(feature = "encryption")]
-use block_modes::{BlockMode, Cbc};
+use block_modes::{block_padding::Pkcs7, BlockMode, Cbc};
 
 #[cfg(feature = "encryption")]
 type Aes128Cbc = Cbc<Aes128, Pkcs7>;

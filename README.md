@@ -3,6 +3,7 @@
 [![github action](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml)
 [![travis](https://travis-ci.com/hanabi1224/bevy_assets_bundler.svg?branch=main)](https://travis-ci.com/github/hanabi1224/bevy_assets_bundler)
 [![codecov](https://codecov.io/gh/hanabi1224/bevy_assets_bundler/branch/main/graph/badge.svg?token=gOcqVpMmIY)](https://codecov.io/gh/hanabi1224/bevy_assets_bundler)
+[![dependency status](https://deps.rs/repo/github/hanabi1224/bevy_assets_bundler/status.svg?style=flat-square)](https://deps.rs/repo/github/hanabi1224/bevy_assets_bundler)
 [![loc](https://tokei.rs/b1/github/hanabi1224/bevy_assets_bundler?category=code)](https://github.com/hanabi1224/bevy_assets_bundler)
 [![License](https://img.shields.io/github/license/hanabi1224/bevy_assets_bundler.svg)](https://github.com/hanabi1224/bevy_assets_bundler/blob/master/LICENSE)
 
@@ -119,7 +120,7 @@ go to ```target/release``` folder, now you can move example(.exe) and assets.bin
 
 ## Disclaimer
 
-The encryption mechnism this library provides does not protect your assets from **ALL** kinds of reverse engineering as long as the game executable and the assets bundle are distributed to end user.
+The encryption mechnism this library provides does not protect your assets from **ALL** kinds of reverse engineering as long as the game executable and the assets bundle are distributed to end users.
 
 ## [License](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/LICENSE)
 
