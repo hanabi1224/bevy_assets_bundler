@@ -22,7 +22,7 @@ Assets Bundler for bevy, with content encryption support. Current archive format
 ```toml
 # Cargo.toml
 [dependencies]
-bevy = "0.5"
+bevy = "0.6"
 bevy_assets_bundler = "0.1"
 
 [build-dependencies]
@@ -31,7 +31,7 @@ bevy_assets_bundler = "0.1"
 <!-- ```toml
 # Cargo.toml
 [dependencies]
-bevy = "0.5"
+bevy = "0.6"
 bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"}
 
 [build-dependencies]
@@ -70,7 +70,7 @@ fn main() {
     options.encode_file_names = true;
     options.enabled_on_debug_build = true;
 
-    App::build()
+    App::new()
         .add_plugins_with(DefaultPlugins, |group| {
             group.add_before::<AssetPlugin, _>(BundledAssetIoPlugin::from(
                 options.clone(),
@@ -107,6 +107,7 @@ pub struct AssetBundlingOptions {
 |bevy|bevy_assets_bundler|
 |---|---|
 |0.5|0.1|
+|0.6|0.2|
 
 ## Examples
 
