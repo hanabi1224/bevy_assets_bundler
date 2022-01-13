@@ -1,6 +1,6 @@
 [package]
 name = "bevy_assets_bundler"
-version = "0.2.0"
+version = "0.2.1"
 
 description = "Assets Bundler for bevy, with content encryption support."
 

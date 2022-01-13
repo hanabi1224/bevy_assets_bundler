@@ -17,18 +17,10 @@ use tar::Archive;
 
 type ParentDirToPathInfo = HashMap<String, Vec<ArchivePathInfo>>;
 
+#[derive(Default)]
 pub struct BundledAssetIo {
     options: AssetBundlingOptions,
     parent_dir_to_path_info: Option<Arc<RwLock<ParentDirToPathInfo>>>,
-}
-
-impl Default for BundledAssetIo {
-    fn default() -> Self {
-        Self {
-            options: AssetBundlingOptions::default(),
-            parent_dir_to_path_info: None,
-        }
-    }
 }
 
 impl From<AssetBundlingOptions> for BundledAssetIo {

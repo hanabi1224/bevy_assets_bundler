@@ -33,4 +33,6 @@ jobs:
       - run: cargo build --release --all-features
       - run: cargo test --release --all-features
 
+      # - run: cargo build --release -p example
+
       - run: cargo fmt --all -- --check

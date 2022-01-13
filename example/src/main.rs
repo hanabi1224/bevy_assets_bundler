@@ -24,7 +24,7 @@ fn main() {
                 BUNDLE_OPTIONS.clone(),
             ))
         })
-        .add_startup_system(setup.system())
+        .add_startup_system(setup)
         .run();
 }
 
@@ -225,7 +225,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                             size: Size::new(Val::Px(500.0), Val::Auto),
                             ..Default::default()
                         },
-                        image: asset_server.load("branding/bevy_logo_dark_big.png").into(),
+                        image: asset_server.load("nonascii/图/图.png").into(),
                         ..Default::default()
                     });
                 });

@@ -77,7 +77,7 @@ fn main() {
                 options.clone(),
             ))
         })
-        .add_startup_system(setup.system())
+        .add_startup_system(setup)
         .run();
 }
 ```

@@ -3,6 +3,8 @@ edition = "2021"
 name = "example"
 version = "0.1.0"
 
+publish = false
+
 [dependencies]
 bevy = "0.6"
 futures-lite = "1"
