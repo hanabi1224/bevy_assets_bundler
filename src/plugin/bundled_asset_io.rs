@@ -126,7 +126,8 @@ impl AssetIo for BundledAssetIo {
             let mappings = lock.read().unwrap();
             let path_str = normalize_path(path);
             if let Some(entries) = mappings.get(&path_str) {
-                let vec: Vec<PathBuf> = entries.iter().map(|e| e.path()).collect();
+                #[allow(clippy::needless_collect)]
+                let vec: Vec<_> = entries.iter().map(|e| e.path()).collect();
                 return Ok(Box::new(vec.into_iter()));
             }
         }

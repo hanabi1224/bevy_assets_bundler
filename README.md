@@ -24,10 +24,10 @@ Assets Bundler for bevy, with content encryption support. Current archive format
 # Cargo.toml
 [dependencies]
 bevy = "0.6"
-bevy_assets_bundler = "0.1"
+bevy_assets_bundler = "0.2"
 
 [build-dependencies]
-bevy_assets_bundler = "0.1"
+bevy_assets_bundler = "0.2"
 ```
 <!-- ```toml
 # Cargo.toml
@@ -107,6 +107,7 @@ pub struct AssetBundlingOptions {
 
 |bevy|bevy_assets_bundler|
 |---|---|
+|main|bevy_main|
 |0.5|0.1|
 |0.6|0.2|
 

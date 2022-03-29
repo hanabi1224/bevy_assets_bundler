@@ -29,7 +29,10 @@ default = [
   "encryption",
 ]
 
-encryption = ["aes", "block-modes"]
+encryption = [
+  "aes",
+  "block-modes",
+]
 
 # compression = ["brotli"]
 
