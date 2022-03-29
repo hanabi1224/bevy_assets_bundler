@@ -6,7 +6,8 @@ version = "0.1.0"
 publish = false
 
 [dependencies]
-bevy = "0.6"
+bevy = {git = "https://github.com/bevyengine/bevy", branch = "main"}
+
 futures-lite = "1"
 lazy_static = "1"
 rand = "0"

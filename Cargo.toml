@@ -38,7 +38,7 @@ encryption = [
 
 [dependencies]
 # https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#tilde-requirements
-bevy = {version = "~0.6", default-features = false}
+bevy = {git = "https://github.com/bevyengine/bevy", default-features = false, branch = "main"}
 
 anyhow = "1"
 bs58 = "0.4"
