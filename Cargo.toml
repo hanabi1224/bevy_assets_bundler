@@ -1,6 +1,6 @@
 [package]
 name = "bevy_assets_bundler"
-version = "0.2.1"
+version = "0.3.0"
 
 description = "Assets Bundler for bevy, with content encryption support."
 
@@ -38,7 +38,7 @@ encryption = [
 
 [dependencies]
 # https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#tilde-requirements
-bevy = {version = "~0.6", default-features = false}
+bevy = {version = "~0.7", default-features = false}
 
 anyhow = "1"
 bs58 = "0.4"

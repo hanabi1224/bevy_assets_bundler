@@ -1,7 +1,6 @@
 # Bevy Assets Bundler
 
 [![github action](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/bevy_assets_bundler/actions/workflows/main.yml)
-[![travis](https://travis-ci.com/hanabi1224/bevy_assets_bundler.svg?branch=main)](https://travis-ci.com/github/hanabi1224/bevy_assets_bundler)
 [![codecov](https://codecov.io/gh/hanabi1224/bevy_assets_bundler/branch/main/graph/badge.svg?token=gOcqVpMmIY)](https://codecov.io/gh/hanabi1224/bevy_assets_bundler)
 [![dependency status](https://deps.rs/repo/github/hanabi1224/bevy_assets_bundler/status.svg?style=flat-square)](https://deps.rs/repo/github/hanabi1224/bevy_assets_bundler)
 [![loc](https://tokei.rs/b1/github/hanabi1224/bevy_assets_bundler?category=code)](https://github.com/hanabi1224/bevy_assets_bundler)
@@ -23,21 +22,12 @@ Assets Bundler for bevy, with content encryption support. Current archive format
 ```toml
 # Cargo.toml
 [dependencies]
-bevy = "0.6"
-bevy_assets_bundler = "0.2"
+bevy = "0.7"
+bevy_assets_bundler = "0.3"
 
 [build-dependencies]
-bevy_assets_bundler = "0.2"
+bevy_assets_bundler = "0.3"
 ```
-<!-- ```toml
-# Cargo.toml
-[dependencies]
-bevy = "0.6"
-bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"}
-
-[build-dependencies]
-bevy_assets_bundler = {git = "https://github.com/hanabi1224/bevy_assets_bundler"}
-``` -->
 
 ## [Build Script](https://github.com/hanabi1224/bevy_assets_bundler/blob/main/example/build.rs)
 
@@ -110,6 +100,7 @@ pub struct AssetBundlingOptions {
 |main|bevy_main|
 |0.5|0.1|
 |0.6|0.2|
+|0.7|0.3|
 
 ## Examples
 

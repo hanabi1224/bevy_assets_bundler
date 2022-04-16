@@ -8,8 +8,10 @@ use std::env;
 /// This example illustrates the various features of Bevy UI.
 fn main() {
     println!("cwd: {:?}", env::current_dir());
-    let mut log_setting = LogSettings::default();
-    log_setting.level = Level::INFO;
+    let log_setting = LogSettings {
+        level: Level::INFO,
+        ..Default::default()
+    };
     App::new()
         .insert_resource(log_setting)
         .add_plugins_with(DefaultPlugins, |group| {
