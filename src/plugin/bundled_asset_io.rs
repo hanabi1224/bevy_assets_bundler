@@ -1,7 +1,7 @@
 use super::path_info::ArchivePathInfo;
 use crate::AssetBundlingOptions;
 use bevy::{
-    asset::{AssetIo, AssetIoError},
+    asset::{AssetIo, AssetIoError, Metadata},
     utils::BoxedFuture,
 };
 use std::{
@@ -134,7 +134,7 @@ impl AssetIo for BundledAssetIo {
         Err(AssetIoError::NotFound(path.to_path_buf()))
     }
 
-    fn is_directory(&self, path: &Path) -> bool {
+    fn is_dir(&self, path: &Path) -> bool {
         // TODO: normalize path
         info!("is_directory: {:?}", path);
         if let Some(lock) = self.parent_dir_to_path_info.clone() {
@@ -152,6 +152,16 @@ impl AssetIo for BundledAssetIo {
 
     fn watch_for_changes(&self) -> Result<(), AssetIoError> {
         Ok(())
+    }
+
+    fn get_metadata(&self, path: &Path) -> Result<bevy::asset::Metadata, AssetIoError> {
+        path.metadata().and_then(Metadata::try_from).map_err(|e| {
+            if e.kind() == std::io::ErrorKind::NotFound {
+                AssetIoError::NotFound(PathBuf::from(path))
+            } else {
+                e.into()
+            }
+        })
     }
 }
 
