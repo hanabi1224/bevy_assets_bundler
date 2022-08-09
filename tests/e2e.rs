@@ -91,18 +91,21 @@ mod tests {
 
         // Valid directories
         for dir in ["fonts", "nonascii/图", "nonascii\\图"] {
-            assert_eq!(asset_io.is_dir(Path::new(dir)), true);
+            anyhow::ensure!(
+                asset_io.get_metadata(Path::new(dir))?.file_type()
+                    == bevy::asset::FileType::Directory
+            );
             let mut n = 0;
             for _ in asset_io.read_directory(Path::new(dir))? {
                 n += 1;
             }
-            assert!(n > 0);
+            anyhow::ensure!(n > 0);
         }
 
         // Invalid directories
         for dir in ["dummy", "fonts/dummy", "fonts\\dummy"] {
-            assert_eq!(asset_io.is_dir(Path::new(dir)), false);
-            assert!(asset_io.read_directory(Path::new("dummy")).is_err());
+            anyhow::ensure!(asset_io.get_metadata(Path::new(dir)).is_err());
+            anyhow::ensure!(asset_io.read_directory(Path::new("dummy")).is_err());
         }
 
         // Valid assets
@@ -111,22 +114,28 @@ mod tests {
             "fonts/FiraSans-Bold.ttf",
             "nonascii/图/图.png",
         ] {
+            anyhow::ensure!(
+                asset_io.get_metadata(Path::new(asset_path))?.file_type()
+                    == bevy::asset::FileType::File
+            );
             let future = asset_io.load_path(Path::new(asset_path));
-            futures_lite::future::block_on(async {
+            anyhow::ensure!(futures_lite::future::block_on(async {
                 match future.await {
                     Ok(v) => {
-                        assert!(v.len() > 0);
+                        anyhow::ensure!(v.len() > 0);
                         let mut file_path = PathBuf::from(ASSET_PATH);
                         file_path.push(asset_path);
-                        let file_data = fs::read(file_path).unwrap();
-                        assert_eq!(v.len(), file_data.len());
-                        assert_eq!(&v, &file_data);
+                        let file_data = fs::read(file_path)?;
+                        anyhow::ensure!(v.len() == file_data.len());
+                        anyhow::ensure!(v == file_data);
                     }
                     _ => {
-                        assert!(false);
+                        anyhow::ensure!(false);
                     }
                 };
-            });
+                Ok(())
+            })
+            .is_ok());
         }
 
         // Valid assets windows path seperator
@@ -136,34 +145,33 @@ mod tests {
             "nonascii\\图\\图.png",
         ] {
             let future = asset_io.load_path(Path::new(asset_path));
-            futures_lite::future::block_on(async {
+            anyhow::ensure!(futures_lite::future::block_on(async {
                 match future.await {
                     Ok(v) => {
-                        assert!(v.len() > 0);
+                        anyhow::ensure!(v.len() > 0);
                         let mut file_path = PathBuf::from(ASSET_PATH);
                         file_path.push(asset_path.replace('\\', "/"));
-                        let file_data = fs::read(file_path).unwrap();
-                        assert_eq!(v.len(), file_data.len());
-                        assert_eq!(&v, &file_data);
+                        let file_data = fs::read(file_path)?;
+                        anyhow::ensure!(v.len() == file_data.len());
+                        anyhow::ensure!(v == file_data);
                     }
                     _ => {
-                        assert!(false);
+                        anyhow::ensure!(false);
                     }
                 };
-            });
+                Ok(())
+            })
+            .is_ok());
         }
 
         // Invalid assets
         for asset_path in ["branding/dummy.png", "dummy.svg"] {
             let future = asset_io.load_path(Path::new(asset_path));
-            futures_lite::future::block_on(async {
-                match future.await {
-                    Ok(_) => {
-                        assert!(false);
-                    }
-                    _ => {}
-                }
-            });
+            anyhow::ensure!(futures_lite::future::block_on(async {
+                anyhow::ensure!(future.await.is_err());
+                Ok(())
+            })
+            .is_ok());
         }
         Ok(())
     }

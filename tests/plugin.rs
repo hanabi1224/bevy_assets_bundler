@@ -5,15 +5,11 @@ mod tests {
     use super::common::prelude::*;
 
     #[test]
-    fn bundle_not_found() {
+    fn bundle_not_found() -> anyhow::Result<()> {
         let options = create_default_options_with_random_bundle_name();
         let mut asset_io = BundledAssetIo::from(options);
-        match asset_io.ensure_loaded() {
-            Ok(_) => {
-                assert!(false)
-            }
-            _ => {}
-        }
+        anyhow::ensure!(asset_io.ensure_loaded().is_err());
+        Ok(())
     }
 
     #[cfg(feature = "encryption")]
@@ -34,14 +30,9 @@ mod tests {
         asset_io.ensure_loaded()?;
         let future = asset_io.load_path(Path::new("branding/bevy_logo_dark_big.png"));
         futures_lite::future::block_on(async {
-            match future.await {
-                Ok(_) => {
-                    assert!(false);
-                }
-                _ => {}
-            };
-        });
-        Ok(())
+            anyhow::ensure!(future.await.is_err());
+            Ok(())
+        })
     }
 
     #[cfg(feature = "encryption")]
