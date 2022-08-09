@@ -25,7 +25,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: cargo check --release --no-default-features
-      - run: cargo test --release --no-default-features
 
       - run: cargo check --release
       - run: cargo test --release

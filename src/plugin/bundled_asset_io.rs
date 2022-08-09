@@ -1,7 +1,7 @@
 use super::path_info::ArchivePathInfo;
 use crate::AssetBundlingOptions;
 use bevy::{
-    asset::{AssetIo, AssetIoError, Metadata},
+    asset::{AssetIo, AssetIoError},
     utils::BoxedFuture,
 };
 use std::{
@@ -41,31 +41,28 @@ impl BundledAssetIo {
             let mut archive = Archive::new(file);
             let mut mappings: ParentDirToPathInfo = HashMap::new();
             let mut n_entries = 0;
-            for entry in archive.entries()? {
-                if entry.is_ok() {
-                    n_entries += 1;
-                    let entry_file = entry?;
-                    let path = entry_file.path()?;
-                    let decoded_path = if self.options.encode_file_names {
-                        self.options.try_decode_path(path.borrow())?
-                        // PathBuf::from(self.options.try_decode_string(path.to_str().unwrap())?)
-                    } else {
-                        path.to_path_buf()
-                    };
-                    // let is_dir = path.is_dir();
-                    let mut parent_dir = decoded_path.clone();
-                    let parent_dir_str = if parent_dir.pop() {
-                        normalize_path(&parent_dir)
-                    } else {
-                        "".into()
-                    };
-                    debug!("Loading asset file {:?}, dir:{:?}", path, parent_dir);
-                    let path_info = ArchivePathInfo::new(decoded_path);
-                    if let Some(vec) = mappings.get_mut(&parent_dir_str) {
-                        vec.push(path_info);
-                    } else {
-                        mappings.insert(parent_dir_str, vec![path_info]);
-                    }
+            for entry in archive.entries()?.flatten() {
+                n_entries += 1;
+                let path = entry.path()?;
+                let decoded_path = if self.options.encode_file_names {
+                    self.options.try_decode_path(path.borrow())?
+                    // PathBuf::from(self.options.try_decode_string(path.to_str().unwrap())?)
+                } else {
+                    path.to_path_buf()
+                };
+                // let is_dir = path.is_dir();
+                let mut parent_dir = decoded_path.clone();
+                let parent_dir_str = if parent_dir.pop() {
+                    normalize_path(&parent_dir)
+                } else {
+                    "".into()
+                };
+                debug!("Loading asset file {:?}, dir:{:?}", path, parent_dir);
+                let path_info = ArchivePathInfo::new(decoded_path);
+                if let Some(vec) = mappings.get_mut(&parent_dir_str) {
+                    vec.push(path_info);
+                } else {
+                    mappings.insert(parent_dir_str, vec![path_info]);
                 }
             }
             info!("{} asset files loaded.", n_entries);
@@ -96,21 +93,16 @@ impl AssetIo for BundledAssetIo {
                 PathBuf::from(normalize_path(path))
             };
             let mut archive = Archive::new(file);
-            for entry in archive.entries()? {
-                if entry.is_ok() {
-                    let mut entry_file = entry?;
-                    let entry_path = entry_file.path()?;
-                    if entry_path.eq(&encoded_entry_path) {
-                        let mut vec = Vec::new();
-                        entry_file.read_to_end(&mut vec)?;
-                        #[cfg(feature = "encryption")]
-                        if let Some(decrypted) =
-                            self.options.try_decrypt(&vec).map_err(map_error)?
-                        {
-                            return Ok(decrypted);
-                        }
-                        return Ok(vec);
+            for mut entry in archive.entries()?.flatten() {
+                let entry_path = entry.path()?;
+                if entry_path.eq(&encoded_entry_path) {
+                    let mut vec = Vec::new();
+                    entry.read_to_end(&mut vec)?;
+                    #[cfg(feature = "encryption")]
+                    if let Some(decrypted) = self.options.try_decrypt(&vec).map_err(map_error)? {
+                        return Ok(decrypted);
                     }
+                    return Ok(vec);
                 }
             }
             Err(AssetIoError::NotFound(path.to_path_buf()))
@@ -134,18 +126,6 @@ impl AssetIo for BundledAssetIo {
         Err(AssetIoError::NotFound(path.to_path_buf()))
     }
 
-    fn is_dir(&self, path: &Path) -> bool {
-        // TODO: normalize path
-        info!("is_directory: {:?}", path);
-        if let Some(lock) = self.parent_dir_to_path_info.clone() {
-            let mappings = lock.read().unwrap();
-            let path_str = normalize_path(path);
-            mappings.contains_key(&path_str)
-        } else {
-            false
-        }
-    }
-
     fn watch_path_for_changes(&self, _path: &Path) -> Result<(), AssetIoError> {
         Ok(())
     }
@@ -155,13 +135,25 @@ impl AssetIo for BundledAssetIo {
     }
 
     fn get_metadata(&self, path: &Path) -> Result<bevy::asset::Metadata, AssetIoError> {
-        path.metadata().and_then(Metadata::try_from).map_err(|e| {
-            if e.kind() == std::io::ErrorKind::NotFound {
-                AssetIoError::NotFound(PathBuf::from(path))
+        info!("get_metadata: {:?}", path);
+        if let Some(lock) = self.parent_dir_to_path_info.clone() {
+            let mappings = lock.read().unwrap();
+            let path_str = normalize_path(path);
+            if mappings.contains_key(&path_str) {
+                Ok(bevy::asset::Metadata::new(bevy::asset::FileType::Directory))
             } else {
-                e.into()
+                for v in mappings.values() {
+                    for info in v {
+                        if info.path() == path {
+                            return Ok(bevy::asset::Metadata::new(bevy::asset::FileType::File));
+                        }
+                    }
+                }
+                Err(AssetIoError::NotFound(path.to_path_buf()))
             }
-        })
+        } else {
+            Err(AssetIoError::NotFound(path.to_path_buf()))
+        }
     }
 }
 
