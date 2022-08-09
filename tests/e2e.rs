@@ -91,7 +91,7 @@ mod tests {
 
         // Valid directories
         for dir in ["fonts", "nonascii/图", "nonascii\\图"] {
-            assert_eq!(asset_io.is_directory(Path::new(dir)), true);
+            assert_eq!(asset_io.is_dir(Path::new(dir)), true);
             let mut n = 0;
             for _ in asset_io.read_directory(Path::new(dir))? {
                 n += 1;
@@ -101,7 +101,7 @@ mod tests {
 
         // Invalid directories
         for dir in ["dummy", "fonts/dummy", "fonts\\dummy"] {
-            assert_eq!(asset_io.is_directory(Path::new(dir)), false);
+            assert_eq!(asset_io.is_dir(Path::new(dir)), false);
             assert!(asset_io.read_directory(Path::new("dummy")).is_err());
         }
 

@@ -3,7 +3,6 @@ use crate::AssetBundlingOptions;
 use bevy::{
     app::{App, Plugin},
     asset::AssetServer,
-    tasks::IoTaskPool,
 };
 
 #[derive(Default)]
@@ -27,19 +26,14 @@ impl Plugin for BundledAssetIoPlugin {
                 }
             }
         }
-        let task_pool = app
-            .world
-            .get_resource::<IoTaskPool>()
-            .expect("`IoTaskPool` resource not found.")
-            .0
-            .clone();
+
         let mut io = BundledAssetIo::from(self.options.clone());
         match io.ensure_loaded() {
             Err(err) => {
                 error!("Fail to load bundled asset: {:?}", err);
             }
             _ => {
-                app.insert_resource(AssetServer::new(io, task_pool));
+                app.insert_resource(AssetServer::new(io));
             }
         }
     }
