@@ -14,7 +14,7 @@ fn main() {
     };
     App::new()
         .insert_resource(log_setting)
-        .add_plugins_with(DefaultPlugins, |group| {
+        .add_plugins(DefaultPlugins.build()
             // the custom asset io plugin must be inserted in-between the
             // `CorePlugin' and `AssetPlugin`. It needs to be after the
             // CorePlugin, so that the IO task pool has already been constructed.
@@ -22,20 +22,20 @@ fn main() {
             // doesn't create another instance of an assert server. In general,
             // the AssetPlugin should still run so that other aspects of the
             // asset system are initialized correctly.
-            group.add_before::<bevy::asset::AssetPlugin, _>(BundledAssetIoPlugin::from(
-                BUNDLE_OPTIONS.clone(),
+            .add_before::<bevy::asset::AssetPlugin, _>(BundledAssetIoPlugin::from(
+                BUNDLE_OPTIONS.clone()
             ))
-        })
+        )
         .add_startup_system(setup)
         .run();
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     // ui camera
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle::default());
     // root node
     commands
-        .spawn_bundle(NodeBundle {
+        .spawn(NodeBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
                 justify_content: JustifyContent::SpaceBetween,
@@ -47,7 +47,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             // left vertical fill (border)
             parent
-                .spawn_bundle(NodeBundle {
+                .spawn(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Px(200.0), Val::Percent(100.0)),
                         border: UiRect::all(Val::Px(2.0)),
