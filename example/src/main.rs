@@ -13,7 +13,7 @@ fn main() {
         ..Default::default()
     };
     App::new()
-        .add_plugin(log_setting)
+      //  .add_plugin(log_setting)
         .add_plugins(DefaultPlugins.build()
             // the custom asset io plugin must be inserted in-between the
             // `CorePlugin' and `AssetPlugin`. It needs to be after the
