@@ -24,6 +24,8 @@ jobs:
           components: rustfmt, clippy
       - uses: actions/checkout@v2
 
+      - uses: Swatinem/rust-cache@v2
+
       - run: cargo check --release --no-default-features
 
       - run: cargo check --release
@@ -60,6 +62,7 @@ jobs:
           toolchain: stable
           override: true
           components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@cargo-llvm-cov
       - run: cargo llvm-cov --all-features --lcov --output-path lcov.info
       - uses: actions/upload-artifact@v2

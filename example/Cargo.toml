@@ -6,10 +6,8 @@ version = "0.1.0"
 publish = false
 
 [dependencies]
-bevy = "0.8"
-futures-lite = "1"
+bevy = "0.9"
 lazy_static = "1"
-rand = "0"
 
 bevy_assets_bundler = {path = "../"}
 
