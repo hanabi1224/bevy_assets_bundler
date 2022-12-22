@@ -22,7 +22,7 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt, clippy
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: Swatinem/rust-cache@v2
 
@@ -44,7 +44,7 @@ jobs:
       - run: cargo build --release -p example
         if: matrix.os == 'windows-latest'
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: matrix.os == 'windows-latest'
         with:
           name: example-windows
@@ -55,7 +55,7 @@ jobs:
   codecov:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -65,7 +65,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@cargo-llvm-cov
       - run: cargo llvm-cov --all-features --lcov --output-path lcov.info
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: lcov.info
           path: lcov.info

@@ -16,3 +16,6 @@ bevy_assets_bundler = {path = "../"}
 [build-dependencies]
 bevy_assets_bundler = {path = "../"}
 lazy_static = "1"
+
+[profile.release]
+strip = true
