@@ -2,12 +2,12 @@ mod common;
 
 #[cfg(test)]
 mod tests {
-    use super::common::prelude::*;
-
     use std::{
         fs,
         path::{Path, PathBuf},
     };
+
+    use super::common::prelude::*;
 
     #[test]
     fn e2e_all_default() {
@@ -87,7 +87,7 @@ mod tests {
         asset_io.ensure_loaded()?;
 
         asset_io.watch_for_changes()?;
-        asset_io.watch_path_for_changes(Path::new("any"))?;
+        asset_io.watch_path_for_changes(Path::new("any"), None)?;
 
         // Valid directories
         for dir in ["fonts", "nonascii/图", "nonascii\\图"] {

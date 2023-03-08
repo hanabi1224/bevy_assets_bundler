@@ -10,13 +10,12 @@ mod bundler;
 pub use bundler::AssetBundler;
 
 mod plugin;
-pub use bevy::asset::AssetIo;
-pub use plugin::{BundledAssetIo, BundledAssetIoPlugin};
-
 #[cfg(feature = "encryption")]
 use aes::Aes128;
+pub use bevy::asset::AssetIo;
 #[cfg(feature = "encryption")]
 use block_modes::{block_padding::Pkcs7, BlockMode, Cbc};
+pub use plugin::{BundledAssetIo, BundledAssetIoPlugin};
 
 #[cfg(feature = "encryption")]
 type Aes128Cbc = Cbc<Aes128, Pkcs7>;

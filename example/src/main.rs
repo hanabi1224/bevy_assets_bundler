@@ -1,9 +1,12 @@
 mod r#mod;
-use r#mod::BUNDLE_OPTIONS;
-
-use bevy::{log::Level, log::LogPlugin, prelude::*};
-use bevy_assets_bundler::BundledAssetIoPlugin;
 use std::env;
+
+use bevy::{
+    log::{Level, LogPlugin},
+    prelude::*,
+};
+use bevy_assets_bundler::BundledAssetIoPlugin;
+use r#mod::BUNDLE_OPTIONS;
 
 /// This example illustrates the various features of Bevy UI.
 fn main() {

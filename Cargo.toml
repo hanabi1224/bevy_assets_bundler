@@ -1,14 +1,10 @@
 [package]
 name = "bevy_assets_bundler"
-version = "0.5.0"
+version = "0.6.0"
 
 description = "Assets Bundler for bevy, with content encryption support."
 
-categories = [
-  "cryptography",
-  "encoding",
-  "game-development",
-]
+categories = ["cryptography", "encoding", "game-development"]
 keywords = ["bevy", "asset", "assets", "bundler"]
 
 readme = "README.md"
@@ -25,19 +21,17 @@ members = ["example"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = [
-  "encryption",
-]
+default = ["encryption"]
 
-encryption = [
-  "aes",
-  "block-modes",
-]
+encryption = ["aes", "block-modes"]
 
 # compression = ["brotli"]
 
+[workspace.dependencies]
+bevy = { version = "0.10", default-features = false }
+
 [dependencies]
-bevy = {version = "0.9", default-features = false, features = ["bevy_asset"]}
+bevy = { workspace = true, default-features = false, features = ["bevy_asset"] }
 
 anyhow = "1"
 bs58 = "0.4"
@@ -46,8 +40,8 @@ tar = "0.4.38"
 tracing = "0.1"
 
 # encryption
-aes = {version = "0.7", optional = true}
-block-modes = {version = "0.8", optional = true}
+aes = { version = "0.7", optional = true }
+block-modes = { version = "0.8", optional = true }
 
 # compression
 # brotli = {version = "3.3", optional = true}
@@ -55,4 +49,4 @@ block-modes = {version = "0.8", optional = true}
 [dev-dependencies]
 futures-lite = "1"
 rand = "0"
-uuid = {version = "1"}
+uuid = "1"

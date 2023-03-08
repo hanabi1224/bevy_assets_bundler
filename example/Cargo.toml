@@ -6,15 +6,15 @@ version = "0.1.0"
 publish = false
 
 [dependencies]
-bevy = "0.9"
+bevy = { workspace = true, features = ["default"] }
 lazy_static = "1"
 
-bevy_assets_bundler = {path = "../"}
+bevy_assets_bundler = { path = "../" }
 
 [dev-dependencies]
 
 [build-dependencies]
-bevy_assets_bundler = {path = "../"}
+bevy_assets_bundler = { path = "../" }
 lazy_static = "1"
 
 [profile.release]

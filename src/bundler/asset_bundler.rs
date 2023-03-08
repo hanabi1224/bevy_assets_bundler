@@ -1,11 +1,11 @@
-use crate::AssetBundlingOptions;
-use std::env;
-use std::fs;
-use std::path::Path;
-use std::path::PathBuf;
-
 #[cfg(feature = "encryption")]
 use std::io::Read;
+use std::{
+    env, fs,
+    path::{Path, PathBuf},
+};
+
+use crate::AssetBundlingOptions;
 
 pub struct AssetBundler {
     pub options: AssetBundlingOptions,

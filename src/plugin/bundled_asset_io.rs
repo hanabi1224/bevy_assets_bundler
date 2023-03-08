@@ -1,9 +1,3 @@
-use super::path_info::ArchivePathInfo;
-use crate::AssetBundlingOptions;
-use bevy::{
-    asset::{AssetIo, AssetIoError},
-    utils::BoxedFuture,
-};
 use std::{
     borrow::Borrow,
     collections::HashMap,
@@ -13,7 +7,15 @@ use std::{
     path::{Path, PathBuf},
     sync::{Arc, RwLock},
 };
+
+use bevy::{
+    asset::{AssetIo, AssetIoError},
+    utils::BoxedFuture,
+};
 use tar::Archive;
+
+use super::path_info::ArchivePathInfo;
+use crate::AssetBundlingOptions;
 
 type ParentDirToPathInfo = HashMap<String, Vec<ArchivePathInfo>>;
 
@@ -126,7 +128,11 @@ impl AssetIo for BundledAssetIo {
         Err(AssetIoError::NotFound(path.to_path_buf()))
     }
 
-    fn watch_path_for_changes(&self, _path: &Path) -> Result<(), AssetIoError> {
+    fn watch_path_for_changes(
+        &self,
+        _to_watch: &Path,
+        _to_reload: Option<PathBuf>,
+    ) -> Result<(), AssetIoError> {
         Ok(())
     }
 

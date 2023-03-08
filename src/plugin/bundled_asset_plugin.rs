@@ -1,9 +1,10 @@
-use super::BundledAssetIo;
-use crate::AssetBundlingOptions;
 use bevy::{
     app::{App, Plugin},
     asset::AssetServer,
 };
+
+use super::BundledAssetIo;
+use crate::AssetBundlingOptions;
 
 #[derive(Default)]
 pub struct BundledAssetIoPlugin {
