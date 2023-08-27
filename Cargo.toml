@@ -28,13 +28,13 @@ encryption = ["aes", "block-modes"]
 # compression = ["brotli"]
 
 [workspace.dependencies]
-bevy = { version = "0.10", default-features = false }
+bevy = { version = "0.11", default-features = false }
 
 [dependencies]
 bevy = { workspace = true, default-features = false, features = ["bevy_asset"] }
 
 anyhow = "1"
-bs58 = "0.4"
+bs58 = "0.5"
 cfg-if = "1"
 tar = "0.4.38"
 tracing = "0.1"

@@ -12,6 +12,7 @@ use bevy::{
     asset::{AssetIo, AssetIoError},
     utils::BoxedFuture,
 };
+use bevy::asset::ChangeWatcher;
 use tar::Archive;
 
 use super::path_info::ArchivePathInfo;
@@ -136,7 +137,7 @@ impl AssetIo for BundledAssetIo {
         Ok(())
     }
 
-    fn watch_for_changes(&self) -> Result<(), AssetIoError> {
+    fn watch_for_changes(&self, _watcher: &ChangeWatcher) -> Result<(), AssetIoError> {
         Ok(())
     }
 
